@@ -2,7 +2,6 @@
 #GITHUB: risingjason
 
 import discord
-import core
 import asyncio
 import enum
 
@@ -15,7 +14,7 @@ fp_token.close()
 
 client = discord.Client()
 
-online_message = "Bot Currently in Development"
+online_message = "Bot v2.0 Currently in Development"
 
 @client.event
 async def on_ready():
@@ -26,8 +25,8 @@ async def on_ready():
 			#utf-8 compatibility paste .encode("utf-8") after channel.name
 			print("Bot is running on server: {}, name: {}, id: {}, type: {}".format(channel.server, channel.name, channel.id, channel.type)) 
 			if channel.name == "general":
-                pass # prints a Bot Online status too all text channels in every server
-				# await client.send_message(channel, online_message)
+				# prints a Bot Online status too all text channels in every server
+				await client.send_message(channel, online_message)
 
 @client.event
 async def on_message(msg):
