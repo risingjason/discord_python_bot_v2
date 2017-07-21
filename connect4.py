@@ -23,10 +23,65 @@ class ConnectFour:
         return -1
 
     def insert(self, column, player):
-        row = ConnectFour.get_height(self, column)
+        row = self.get_height(column)
         self.board[row][column] = player
+        if self.is_winner(player):
+            print("Player {} is Winner!".format(player))
+        elif self.full_board():
+            print("Draw!")
+        return
+
+    def full_board(self):
+        for row in range(self.height):
+            for col in range(self.width):
+                if self.board[row][col] == 0:
+                    return False
+        return True
+
+    def is_winner(self, player):
+        # check for horizontal -- winner
+        for row in range(self.height-3):
+            for col in range(self.width):
+                if self.board[row][col] == self.board[row+1][col] == self.board[row+2][col] == self.board[row+3][col] == player:
+                    return True
+
+        # check for vertical | winner
+        for row in range(self.height):
+            for col in range(self.width-3):
+                if self.board[row][col] == self.board[row][col+1] == self.board[row][col+2] == self.board[row][col+3] == player:
+                    return True
+
+        # check for diagonal / winner
+        for row in range(self.height-3):
+            for col in range(self.width-3):
+                if self.board[row][col] == self.board[row+1][col+1] == self.board[row+2][col+2] == self.board[row+3][col+3] == player:
+                    return True
+    
+        # check for diagonal \ winner
+        for row in range(self.height-3):
+            for col in range(3,self.width-3):
+                if self.board[row][col] == self.board[row+1][col-1] == self.board[row+2][col-2] == self.board[row+3][col-3] == player:
+                    return True
+        
+        return False
 
 c = ConnectFour()
 c.print_board()
+
 c.insert(3, 1)
+c.print_board()
+
+c.insert(2, 2)
+c.insert(2, 1)
+c.print_board()
+
+c.insert(1, 2)
+c.insert(1, 2)
+c.insert(1, 1)
+c.print_board()
+
+c.insert(0, 2)
+c.insert(0, 1)
+c.insert(0, 2)
+c.insert(0, 1)
 c.print_board()
