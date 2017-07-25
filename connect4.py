@@ -1,9 +1,16 @@
-class ConnectFour:
+from player import *
 
-    def __init__(self):
+class ConnectFour(object):
+    player1 = None
+    player2 = None
+    game_end = False
+
+    def __init__(self, player1, player2):
         self.width = 7
         self.height = 6
         self.board = [[0 for x in range(self.width)] for y in range(self.height)]
+        self.player1 = Player(player1, 1)
+        self.player2 = Player(player2, 2)
         
     def print_board(self):
         for row in reversed(range(self.height)):
@@ -23,11 +30,18 @@ class ConnectFour:
         return -1
 
     def insert(self, column, player):
+        # cannot insert even though there is no winner
+        if self.game_end:
+            print("Cannot insert. The game has already been comleted.")
+            return
+
         row = self.get_height(column)
         self.board[row][column] = player
         if self.is_winner(player):
+            self.game_end = True
             print("Player {} is Winner!".format(player))
         elif self.full_board():
+            self.game_end = True
             print("Draw!")
         return
 
@@ -65,7 +79,9 @@ class ConnectFour:
         
         return False
 
-c = ConnectFour()
+p1 = Player("red", 1)
+p2 = Player("blue", 1)
+c = ConnectFour(p1, p2)
 c.print_board()
 
 c.insert(3, 1)
@@ -85,3 +101,5 @@ c.insert(0, 1)
 c.insert(0, 2)
 c.insert(0, 1)
 c.print_board()
+
+c.insert(4, 2)
