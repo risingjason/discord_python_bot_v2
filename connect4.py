@@ -5,13 +5,12 @@ class ConnectFour(object):
     player2 = None
     game_end = False
 
-    def __init__(self, player1, player2):
+    def __init__(self):
         self.width = 7
         self.height = 6
         self.board = [[0 for x in range(self.width)] for y in range(self.height)]
-        self.player1 = Player(player1, 1)
-        self.player2 = Player(player2, 2)
-        
+    
+    # print the 2D array for testing purposes
     def print_board(self):
         for row in reversed(range(self.height)):
             print("Row: " + str(row), end="| ")
@@ -29,27 +28,47 @@ class ConnectFour(object):
                 return row
         return -1
 
+    # returns True when works as intended, returns False when it does not
     def insert(self, column, player):
         # cannot insert even though there is no winner
         if self.game_end:
             print("Cannot insert. The game has already been comleted.")
-            return
+            return False
+
+        # illegal move
+        if not self.is_legal(column):
+            print("Cannot insert. Illegal move.")
+            return False
 
         row = self.get_height(column)
         self.board[row][column] = player
+
+        # find winner, game ends when there is a winner
         if self.is_winner(player):
             self.game_end = True
-            print("Player {} is Winner!".format(player))
+            # print("Player {} is Winner!".format(player))
         elif self.full_board():
             self.game_end = True
-            print("Draw!")
-        return
+            # print("Draw!")
+        return True
+
+    def is_legal(self, column):
+        if column > 6 or column < 0:
+            return False
+        if self.get_height(column) == -1:
+            return False
+        if not isinstance(column, int):
+            return False
+        return True
 
     def full_board(self):
-        for row in range(self.height):
-            for col in range(self.width):
-                if self.board[row][col] == 0:
-                    return False
+        # for row in range(self.height):
+        #     for col in range(self.width):
+        #         if self.board[row][col] == 0:
+        #             return False
+        for col in range(self.width):
+            if self.get_height(col) != -1:
+                return False
         return True
 
     def is_winner(self, player):
@@ -79,27 +98,90 @@ class ConnectFour(object):
         
         return False
 
-p1 = Player("red", 1)
-p2 = Player("blue", 1)
-c = ConnectFour(p1, p2)
+
+## TESTING GOES HERE ##
+c = ConnectFour()
+p1 = Player("red", 1, c)
+p2 = Player("blue", 2, c)
 c.print_board()
 
-c.insert(3, 1)
+## TEST LEGAL MOVES ##
+# c.insert(7, 1)
+
+## TEST WINNING ##
+p1.move(3)
 c.print_board()
 
-c.insert(2, 2)
-c.insert(2, 1)
+p2.move(2)
+p1.move(2)
 c.print_board()
 
-c.insert(1, 2)
-c.insert(1, 2)
-c.insert(1, 1)
+p2.move(1)
+p2.move(1)
+p1.move(1)
 c.print_board()
 
-c.insert(0, 2)
-c.insert(0, 1)
-c.insert(0, 2)
-c.insert(0, 1)
+p2.move(0)
+p1.move(0)
+p2.move(0)
+p1.move(0)
 c.print_board()
 
-c.insert(4, 2)
+p1.move(4)
+
+## TEST DRAW ##
+# c.insert(0, 3)
+# c.insert(0, 3)
+# c.insert(0, 3)
+# c.insert(0, 1)
+# c.insert(0, 3)
+# c.insert(0, 3)
+
+
+# c.insert(1, 4)
+# c.insert(1, 4)
+# c.insert(1, 4)
+# c.insert(1, 2)
+# c.insert(1, 4)
+# c.insert(1, 4)
+
+
+# c.insert(2, 5)
+# c.insert(2, 5)
+# c.insert(2, 5)
+# c.insert(2, 1)
+# c.insert(2, 5)
+# c.insert(2, 5)
+
+
+# c.insert(3, 6)
+# c.insert(3, 6)
+# c.insert(3, 6)
+# c.insert(3, 7)
+# c.insert(3, 6)
+# c.insert(3, 6)
+
+
+# c.insert(4, 1)
+# c.insert(4, 1)
+# c.insert(4, 1)
+# c.insert(4, 2)
+# c.insert(4, 1)
+# c.insert(4, 1)
+
+# c.insert(5, 9)
+# c.insert(5, 9)
+# c.insert(5, 9)
+# c.insert(5, 8)
+# c.insert(5, 9)
+# c.insert(5, 9)
+
+
+# c.insert(6, 5)
+# c.insert(6, 5)
+# c.insert(6, 5)
+# c.insert(6, 6)
+# c.insert(6, 5)
+# c.insert(6, 5)
+
+# c.print_board()
