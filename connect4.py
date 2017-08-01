@@ -52,6 +52,10 @@ class ConnectFour(object):
             # print("Draw!")
         return True
 
+    def undo_move(self, column):
+        current_height = self.get_height(column)
+        self.board[current_height-1][column] = 0
+
     def is_legal(self, column):
         if column > 6 or column < 0:
             return False
