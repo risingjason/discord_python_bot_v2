@@ -113,25 +113,25 @@ c.print_board()
 # c.insert(7, 1)
 
 ## TEST WINNING ##
-p1.move(3)
-c.print_board()
+# p1.move(3)
+# c.print_board()
 
-p2.move(2)
-p1.move(2)
-c.print_board()
+# p2.move(2)
+# p1.move(2)
+# c.print_board()
 
-p2.move(1)
-p2.move(1)
-p1.move(1)
-c.print_board()
+# p2.move(1)
+# p2.move(1)
+# p1.move(1)
+# c.print_board()
 
-p2.move(0)
-p1.move(0)
-p2.move(0)
-p1.move(0)
-c.print_board()
+# p2.move(0)
+# p1.move(0)
+# p2.move(0)
+# p1.move(0)
+# c.print_board()
 
-p1.move(4)
+# p1.move(4)
 
 ## TEST DRAW ##
 # c.insert(0, 3)

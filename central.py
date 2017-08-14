@@ -4,11 +4,11 @@
 #GITHUB: risingjason
 
 import discord
+import commands
 import asyncio
 import enum
 import os
 import sys
-from os.path import getmtime
 
 #NEW UPDATE TO DISCORD NO LONGER ALLOWS BOT TO BE LOGGED IN THROUGH EMAIL AND PASSWORD
 #Copy and paste your bot's token into infos.txt
@@ -36,7 +36,7 @@ async def on_ready():
 			
 				#if channel.name == "general": # use this to only send to specifil text channels
 				# prints a Bot Online status too all text channels in every server
-				await client.send_message(channel, online_message)
+				#await client.send_message(channel, online_message)
 
 @client.event
 async def on_message(msg):
@@ -45,20 +45,8 @@ async def on_message(msg):
 	mentions = msg.raw_mentions
 
 	#waits for any of the commands in core to be called upon
-	#if cmd in core.commands:
-	#	await core.commands[cmd](client, msg, cmds)
+	# if cmd in core.commands:
+	# 	await core.commands[cmd](client, msg, cmds)
 
 print("Starting bot...")
 client.run(token)
-
-# does not work. find another way
-# allows bot to restart after any of the listed files are updated
-# WATCHED_FILES = [__file__, "connect4.py", "player.py"]
-# WATCHED_FILE_MTIMES = [(f, getmtime(f)) for f in WATCHED_FILES]
-
-# while True:
-# 	for f, mtime in WATCHED_FILE_MTIMES:
-# 		if getmtime(f) != mtime:
-# 			print("FILES UPDATED.... RESTARTING")
-# 			os.execv(sys.executable, ['python3'] + sys.argv)
-# # TODO: either solve restarting bot issue or not have the functionality at all
