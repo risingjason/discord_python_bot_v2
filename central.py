@@ -40,13 +40,14 @@ async def on_ready():
 
 @client.event
 async def on_message(msg):
-	cmds = msg.content.split(' ') # seperates the message word by word
-	cmd = cmds[0].lower() # takes the first word (most commands are called using the first word of message)
-	mentions = msg.raw_mentions
+	cmds = [x.lower() for x in msg.content.split(" ")] # parses string and makes them lowercase
+	cmd = cmds[0] # first word is always !command; used to access commands.py module
+	mentions = msg.raw_mentions # might be of use in the future
 
-	#waits for any of the commands in core to be called upon
-	# if cmd in core.commands:
-	# 	await core.commands[cmd](client, msg, cmds)
+	#waits for any of the commands in commands.py to be called upon
+	#if msg.channel.id in allowed_text_channels:
+	if cmd in commands.commands:
+		await commands.commands[cmd](client, msg, cmds)
 
 print("Starting bot...")
 client.run(token)
