@@ -2,13 +2,16 @@ from player import *
 
 class ConnectFour(object):
     game_end = False
+    game_draw = False
     player1 = None
     player2 = None
+    turn = None
 
     def __init__(self):
         self.width = 7
         self.height = 6
         self.board = [[0 for x in range(self.width)] for y in range(self.height)]
+        self.turn = 1
     
     # set the player object
     def set_player(self, player, num):
@@ -41,13 +44,19 @@ class ConnectFour(object):
     def insert(self, column, player):
         # cannot insert even though there is no winner
         if self.game_end:
-            print("Cannot insert. The game has already been comleted.")
+            print("Cannot insert. The game has already been completed.")
             return False
 
         # illegal move
         if not self.is_legal(column):
             print("Cannot insert. Illegal move.")
             return False
+
+        # change turns
+        if self.turn == 1:
+            self.turn = 2
+        elif self.turn == 2:
+            self.turn = 1
 
         row = self.get_height(column)
         self.board[row][column] = player
@@ -58,6 +67,7 @@ class ConnectFour(object):
             # print("Player {} is Winner!".format(player))
         elif self.full_board():
             self.game_end = True
+            self.game_draw = True
             # print("Draw!")
         return True
 
