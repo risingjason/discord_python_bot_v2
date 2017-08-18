@@ -10,7 +10,7 @@ connect_four_syntax = "```Connect4! Start game with !connect4 start @user\n" +\
                       "- play: !connect4 place (column) to place a piece in a column from 1-7\n" +\
                       "- if @user is this bot, then you will play against an AI (currently in development)```"
 
-async def cmd_connect_four(client, msg, cmds):
+async def connect_four(client, msg, cmds):
     # correct command looks like this: "!connect4 start @user" ex. user mention string <@153142506014507008>
     # @user can any human, if @user is the bot, then play against AI
     # only one player can be in a session at a time
@@ -138,7 +138,7 @@ async def check_winner(client, msg, cmds, first_user_id, board):
         print("Hello Game Win")
         if board.game_draw:
             print("hello Game Draw")
-            await client.send_message(msg.channel, "`This game is a draw!'")
+            await client.send_message(msg.channel, "`This game is a draw!`")
         else:
             await client.send_message(msg.channel, "`The winner is `{}`!`".format(msg.author.mention))
             
@@ -204,6 +204,3 @@ def emoji_board(connect4_obj):
 
     emoji_board += " ".join(emoji_nums)        
     return emoji_board
-
-commands = { "!connect4":cmd_connect_four }
-

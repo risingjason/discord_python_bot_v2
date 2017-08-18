@@ -23,7 +23,7 @@ online_message = "`Bot v2.0 Currently in Development`"
 
 # added text channels filter list to avoid spamming multiple text channels
 allowed_text_channels = ["93456386729451520", "169666525404463105"]
-@ allowed_users = ["91115380646354944", "93610826346266624"]
+# allowed_users = ["91115380646354944", "93610826346266624"]
 # master_user = "91115380646354944"
 # in case i need to ban people
 # <@153142506014507008> <@292941873956257792> <@153753304751538176> <@93610826346266624>
