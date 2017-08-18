@@ -1,15 +1,24 @@
 from player import *
 
 class ConnectFour(object):
+    game_end = False
     player1 = None
     player2 = None
-    game_end = False
 
     def __init__(self):
         self.width = 7
         self.height = 6
         self.board = [[0 for x in range(self.width)] for y in range(self.height)]
     
+    # set the player object
+    def set_player(self, player, num):
+        if num == 1:
+            self.player1 = player
+        elif num == 2:
+            self.player2 = player
+        else:
+            return
+
     # print the 2D array for testing purposes
     def print_board(self):
         for row in reversed(range(self.height)):
@@ -104,10 +113,12 @@ class ConnectFour(object):
 
 
 ## TESTING GOES HERE ##
-c = ConnectFour()
-p1 = Player("red", 1, c)
-p2 = Player("blue", 2, c)
-c.print_board()
+# c = ConnectFour()
+# p1 = Player("red", 1, c)
+# p2 = Player("blue", 2, c)
+# c.set_player(p1, 1)
+# c.set_player(p2, 2)
+# c.print_board()
 
 ## TEST LEGAL MOVES ##
 # c.insert(7, 1)
