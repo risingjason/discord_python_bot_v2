@@ -115,7 +115,7 @@ class ConnectFour(object):
     
         # check for diagonal \ winner
         for row in range(self.height-3):
-            for col in range(3,self.width-3):
+            for col in range(3,self.width):
                 if self.board[row][col] == self.board[row+1][col-1] == self.board[row+2][col-2] == self.board[row+3][col-3] == player:
                     return True
         
