@@ -130,7 +130,7 @@ async def make_move(client, msg, cmds, first_user_id, column):
         return
 
     emojis = emoji_board(current_board)
-    await client.send_message(msg.channel, emojis + "\n{} vs. {}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">")
+    await client.send_message(msg.channel, emojis + "\n{} vs. {}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">"))
     await check_winner(client, msg, cmds, who_is, current_board)
     return
 
