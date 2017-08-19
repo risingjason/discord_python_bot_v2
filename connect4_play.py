@@ -78,6 +78,8 @@ async def start_game(client, msg, cmds, mentions, first_user_id, second_user_id)
     else:
         await client.send_message(msg.channel, "{}`is now playing against `{}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">"))
         create_game(first_user_id, second_user_id)
+        emoji = emoji_board(connect_four_sessions[first_user_id])
+        await client.send_message(msg.channel, emoji + "\n{} vs. {}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">"))
     return
 
 async def place_piece(client, msg, cmds, first_user_id):
@@ -128,7 +130,7 @@ async def make_move(client, msg, cmds, first_user_id, column):
         return
 
     emojis = emoji_board(current_board)
-    await client.send_message(msg.channel, emojis)
+    await client.send_message(msg.channel, emojis + "\n{} vs. {}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">")
     await check_winner(client, msg, cmds, who_is, current_board)
     return
 
