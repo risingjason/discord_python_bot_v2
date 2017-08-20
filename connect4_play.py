@@ -7,7 +7,7 @@ users_in_c4_session = {}
 
 connect_four_syntax = "```Connect4! Start game with !connect4 start @user\n" +\
                       "- start: the person who types the message is player 1 and @user is player 2\n" +\
-                      "- play: !connect4 place (column) to place a piece in a column from 1-7\n" +\
+                      "- play: !c4 p (column) to place a piece in a column from 1-7\n" +\
                       "- if @user is this bot, then you will play against an AI (currently in development)```"
 
 async def connect_four(client, msg, cmds):
@@ -28,7 +28,7 @@ async def connect_four(client, msg, cmds):
         return
 
     # case: !connect4 asdfsaf
-    if cmds[1] != "start" and cmds[1] != "place" and cmds[1] != "stop":
+    if cmds[1] != "start" and cmds[1] != "p" and cmds[1] != "stop":
         await client.send_message(msg.channel, "`Invalid Command. Example command: !connect4 start @user OR !connect4 place (column)`")
         return
     
@@ -48,7 +48,7 @@ async def connect_four(client, msg, cmds):
         return
 
     # placing tile command: "!connect4 place X" where X is a column from 1-7
-    if cmds[1] == "place":
+    if cmds[1] == "p":
         await place_piece(client, msg, cmds, first_user_id)
         return
 
@@ -130,7 +130,7 @@ async def make_move(client, msg, cmds, first_user_id, column):
         return
 
     emojis = emoji_board(current_board)
-    await client.send_message(msg.channel, emojis + "\n{} vs. {}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">"))
+    await client.send_message(msg.channel, emojis + "\n{} vs. {}".format("<@" + who_is + ">", "<@" + second_user_id + ">"))
     await check_winner(client, msg, cmds, who_is, current_board)
     return
 
