@@ -1,22 +1,18 @@
+from connect4 import *
 
 class Player(object):
     
     player = 0      # 1 for going first, 2 for going second
-    board = None
-    color = None
+    game_board = None
 
-    def __init__(self, name, player, board):
+    def __init__(self, name, player, game_board):
         self.name = name
         self.player = player
-        self.board = board
-        if player == 1:
-            self.color = "red"
-        elif player == 2:
-            self.color = "blue"
+        self.game_board = game_board
     
     def move(self, column):
         next_move = column
 
         # error checking will be done by the bot, instead of the Player class
-        if self.board.insert(next_move, self.player):
-            print("{0} piece placed in column {1}.".format(self.color, next_move))
+        if self.game_board.insert(next_move, self.player):
+            print("{} placed in column {}.".format(self.name, next_move))

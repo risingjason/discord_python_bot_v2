@@ -24,7 +24,7 @@ online_message = "`Bot v2.0 Currently in Development`"
 # added text channels filter list to avoid spamming multiple text channels , "169666525404463105"
 allowed_text_channels = ["93456386729451520"]
 # allowed_users = ["91115380646354944", "93610826346266624"]
-# master_user = "91115380646354944"
+master_user = "91115380646354944"
 # in case i need to ban people
 # <@153142506014507008> <@292941873956257792> <@153753304751538176> <@93610826346266624>
 @client.event
@@ -46,11 +46,11 @@ async def on_message(msg):
 	cmds = [x.lower() for x in msg.content.split(" ")] # parses string and makes them lowercase
 	cmd = cmds[0] # first word is always !command; used to access commands.py module
 	mentions = msg.raw_mentions # might be of use in the future
-	print(cmds)
+	# print(cmds)
 	#waits for any of the commands in commands.py to be called upon
 	#if msg.channel.id in allowed_text_channels:
 
-	if cmd in commands.commands:
+	if cmd in commands.commands and msg.author.id == master_user:
 		await commands.commands[cmd](client, msg, cmds)
 
 print("Starting bot...")

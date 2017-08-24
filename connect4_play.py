@@ -1,9 +1,11 @@
 import discord
 from connect4 import *
 from player import *
+from aiplayer import *
 
 connect_four_sessions = {}
 users_in_c4_session = {}
+bot_user_id = "173910622713413633"
 
 connect_four_syntax = "```Connect4! Start game with !connect4 start @user\n" +\
                       "- start: the person who types the message is player 1 and @user is player 2\n" +\
@@ -24,12 +26,12 @@ async def connect_four(client, msg, cmds):
 
     # case: !connect4 asdf asf asdf
     if len(cmds) != 3:
-        await client.send_message(msg.channel, "`Invalid Command. Example command: !connect4 start @user OR !connect4 place (column)`")
+        await client.send_message(msg.channel, "`Invalid Command. Example command: !connect4 start @user OR !connect4 p (column)`")
         return
 
     # case: !connect4 asdfsaf
     if cmds[1] != "start" and cmds[1] != "p" and cmds[1] != "stop":
-        await client.send_message(msg.channel, "`Invalid Command. Example command: !connect4 start @user OR !connect4 place (column)`")
+        await client.send_message(msg.channel, "`Invalid Command. Example command: !connect4 start @user OR !connect4 p (column)`")
         return
     
     
@@ -45,6 +47,7 @@ async def connect_four(client, msg, cmds):
 
         second_user_id = mentions[0].id
         await start_game(client, msg, cmds, mentions, first_user_id, second_user_id)
+        
         return
 
     # placing tile command: "!connect4 place X" where X is a column from 1-7
@@ -68,7 +71,7 @@ async def start_game(client, msg, cmds, mentions, first_user_id, second_user_id)
         await client.send_message(msg.channel, "{}` is in another Connect4 session. Only one session is allowed per user.`".format(str(msg.author.mention)))
         return
     # case: opponent is already in game session
-    elif second_user_id in users_in_c4_session.values():
+    elif second_user_id in users_in_c4_session.values() and not bot_user_id:
         await client.send_message(msg.channel, "{}` is in another Connect4 session. Only one session is allowed per user.`".format(str(mentions[0].mention)))
         return
     # case: person is trying to play against themselves
@@ -77,7 +80,11 @@ async def start_game(client, msg, cmds, mentions, first_user_id, second_user_id)
         return
     else:
         await client.send_message(msg.channel, "{}`is now playing against `{}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">"))
-        create_game(first_user_id, second_user_id)
+        if not second_user_id == bot_user_id:
+            create_game(first_user_id, second_user_id)
+        else:
+            create_bot_game(first_user_id, second_user_id)
+
         emoji = emoji_board(connect_four_sessions[first_user_id])
         await client.send_message(msg.channel, emoji + "\n{} vs. {}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">"))
     return
@@ -132,6 +139,18 @@ async def make_move(client, msg, cmds, first_user_id, column):
     emojis = emoji_board(current_board)
     await client.send_message(msg.channel, emojis + "\n{} vs. {}".format("<@" + who_is + ">", "<@" + second_user_id + ">"))
     await check_winner(client, msg, cmds, who_is, current_board)
+    if current_board.game_end:
+        return
+
+    # if playing against AI
+    if second_user_id == bot_user_id:
+        current_board.player2.get_ai_move()
+
+        await client.send_message(msg.channel, ":robot: `I have made my move.` :robot:")
+        emojis = emoji_board(current_board)
+        await client.send_message(msg.channel, emojis + "\n{} vs. {}".format("<@" + who_is + ">", "<@" + second_user_id + ">"))
+        await check_winner(client, msg, cmds, who_is, current_board)
+
     return
 
 async def check_winner(client, msg, cmds, first_user_id, board): 
@@ -142,7 +161,7 @@ async def check_winner(client, msg, cmds, first_user_id, board):
             print("hello Game Draw")
             await client.send_message(msg.channel, "`This game is a draw!`")
         else:
-            await client.send_message(msg.channel, "`The winner is `{}`!`".format(msg.author.mention))
+            await client.send_message(msg.channel, "`The winner is  `{}`!`".format(msg.author.mention))
             
         del connect_four_sessions[first_user_id]
         del users_in_c4_session[first_user_id]
@@ -185,6 +204,22 @@ def create_game(first_user_id, second_user_id):
     print("Connect 4 Key is on {}".format(first_user_id))
     print("p1: {}, p2: {}".format(users_in_c4_session[first_user_id], second_user_id))
 
+
+def create_bot_game(first_user_id, second_user_id):
+    print("Successful Start Command")
+
+    # create board and players
+    connect_four_game = ConnectFour()
+    play1 = Player(first_user_id, 1, connect_four_game)
+    play2 = AIPlayer(second_user_id, 2, connect_four_game)
+    connect_four_game.set_player(play1, 1)
+    connect_four_game.set_player(play2, 2)
+
+    # add board to dictionary
+    users_in_c4_session[first_user_id] = second_user_id
+    connect_four_sessions[first_user_id] = connect_four_game
+    print("Connect 4 Key is on {}".format(first_user_id))
+    print("p1: {}, p2: {}".format(users_in_c4_session[first_user_id], second_user_id))
 
 def emoji_board(connect4_obj):
     # prints connect four game board in emoji form

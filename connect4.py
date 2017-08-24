@@ -6,6 +6,7 @@ class ConnectFour(object):
     player1 = None
     player2 = None
     turn = None
+    winning_player = None
 
     def __init__(self):
         self.width = 7
@@ -30,7 +31,7 @@ class ConnectFour(object):
                 print(self.board[row][col], end=" ")
             print()
         print("---------------------")
-        print("Col: -| 1 2 3 4 5 6 7")
+        print("Col: -| 1 2 3 4 5 6 7\n")
 
     # returns the height where the next piece would be placed
     # returns -1 if the column is filled
@@ -44,7 +45,7 @@ class ConnectFour(object):
     def insert(self, column, player):
         # cannot insert even though there is no winner
         if self.game_end:
-            print("Cannot insert. The game has already been completed.")
+            #print("Cannot insert. The game has already been completed.")
             return False
 
         # illegal move
@@ -52,28 +53,47 @@ class ConnectFour(object):
             print("Cannot insert. Illegal move.")
             return False
 
-        # change turns
-        if self.turn == 1:
-            self.turn = 2
-        elif self.turn == 2:
-            self.turn = 1
-
         row = self.get_height(column)
+        # print("row : {}   ".format(row), end=" ")
         self.board[row][column] = player
 
         # find winner, game ends when there is a winner
         if self.is_winner(player):
             self.game_end = True
+            self.winning_player = self.turn
             # print("Player {} is Winner!".format(player))
         elif self.full_board():
             self.game_end = True
             self.game_draw = True
+            self.winning_player = 0
             # print("Draw!")
+
+        self.change_turns()
+
         return True
 
+    # removes top piece from given column
+    # only used to undo latest move for AI purposes
     def undo_move(self, column):
         current_height = self.get_height(column)
         self.board[current_height-1][column] = 0
+
+        # make sure to undo a winning state
+        if self.game_end:
+            self.game_end = False
+        if self.game_draw:
+            self.game_draw = False
+        if self.winning_player:
+            self.winning_player = False
+        
+        self.change_turns
+
+    def change_turns(self):
+        # change turns
+        if self.turn == 1:
+            self.turn = 2
+        elif self.turn == 2:
+            self.turn = 1
 
     def is_legal(self, column):
         if column > 6 or column < 0:
@@ -85,10 +105,6 @@ class ConnectFour(object):
         return True
 
     def full_board(self):
-        # for row in range(self.height):
-        #     for col in range(self.width):
-        #         if self.board[row][col] == 0:
-        #             return False
         for col in range(self.width):
             if self.get_height(col) != -1:
                 return False
