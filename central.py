@@ -50,7 +50,7 @@ async def on_message(msg):
 	#waits for any of the commands in commands.py to be called upon
 	#if msg.channel.id in allowed_text_channels:
 
-	if cmd in commands.commands and msg.author.id == master_user:
+	if cmd in commands.commands:
 		await commands.commands[cmd](client, msg, cmds)
 
 print("Starting bot...")

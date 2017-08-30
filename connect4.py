@@ -7,6 +7,7 @@ class ConnectFour(object):
     player2 = None
     turn = None
     winning_player = None
+    last_moves = []
 
     def __init__(self):
         self.width = 7
@@ -56,6 +57,7 @@ class ConnectFour(object):
         row = self.get_height(column)
         # print("row : {}   ".format(row), end=" ")
         self.board[row][column] = player
+        self.last_moves.append(column)
 
         # find winner, game ends when there is a winner
         if self.is_winner(player):
@@ -74,7 +76,8 @@ class ConnectFour(object):
 
     # removes top piece from given column
     # only used to undo latest move for AI purposes
-    def undo_move(self, column):
+    def undo_move(self):
+        column = self.last_moves[-1]
         current_height = self.get_height(column)
         self.board[current_height-1][column] = 0
 
@@ -86,7 +89,8 @@ class ConnectFour(object):
         if self.winning_player:
             self.winning_player = False
         
-        self.change_turns
+        self.last_moves.pop()
+        self.change_turns()
 
     def change_turns(self):
         # change turns
@@ -144,6 +148,14 @@ class ConnectFour(object):
 # p2 = Player("blue", 2, c)
 # c.set_player(p1, 1)
 # c.set_player(p2, 2)
+# c.print_board()
+
+## TEST UNDO MOVE ##
+# p1.move(3)
+# c.print_board()
+# p2.move(3)
+# c.print_board()
+# c.undo_move()
 # c.print_board()
 
 ## TEST LEGAL MOVES ##
@@ -226,3 +238,4 @@ class ConnectFour(object):
 # c.insert(6, 5)
 
 # c.print_board()
+

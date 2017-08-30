@@ -3,6 +3,7 @@ from connect4 import *
 from player import *
 from aiplayer import *
 
+valid_queries = ["start", "place", "p", "stop", "s"]
 connect_four_sessions = {}
 users_in_c4_session = {}
 bot_user_id = "173910622713413633"
@@ -30,13 +31,13 @@ async def connect_four(client, msg, cmds):
         return
 
     # case: !connect4 asdfsaf
-    if cmds[1] != "start" and cmds[1] != "p" and cmds[1] != "stop":
+    if not cmds[1] in valid_queries:
         await client.send_message(msg.channel, "`Invalid Command. Example command: !connect4 start @user OR !connect4 p (column)`")
         return
     
     
     # case: !connect4 start @user_in_session
-    if cmds[1] == "start":
+    if cmds[1] == "start" or cmds[1] == "s":
         # case: !connect4 start @non_existent_user
         if not mentions:
             await client.send_message(msg.channel, "`Invalid Command. Example command: !connect4 start @user`")
@@ -51,7 +52,7 @@ async def connect_four(client, msg, cmds):
         return
 
     # placing tile command: "!connect4 place X" where X is a column from 1-7
-    if cmds[1] == "p":
+    if cmds[1] == "p" or cmds[1] == "place":
         await place_piece(client, msg, cmds, first_user_id)
         return
 
@@ -83,7 +84,8 @@ async def start_game(client, msg, cmds, mentions, first_user_id, second_user_id)
         if not second_user_id == bot_user_id:
             create_game(first_user_id, second_user_id)
         else:
-            create_bot_game(first_user_id, second_user_id)
+            # create_bot_game(first_user_id, second_user_id)
+            pass # AI put on hold
 
         emoji = emoji_board(connect_four_sessions[first_user_id])
         await client.send_message(msg.channel, emoji + "\n{} vs. {}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">"))
