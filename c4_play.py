@@ -1,7 +1,7 @@
 import discord
-from connect4 import *
-from player import *
-from aiplayer import *
+from c4 import *
+from c4_player import *
+from c4_aiplayer import *
 
 valid_queries = ["start", "place", "p", "stop", "s"]
 connect_four_sessions = {}
@@ -85,7 +85,8 @@ async def start_game(client, msg, cmds, mentions, first_user_id, second_user_id)
             create_game(first_user_id, second_user_id)
         else:
             # create_bot_game(first_user_id, second_user_id)
-            pass # AI put on hold
+            await client.send_message(msg.channel, "AI disabled until further development.")
+            # return # AI put on hold
 
         emoji = emoji_board(connect_four_sessions[first_user_id])
         await client.send_message(msg.channel, emoji + "\n{} vs. {}".format("<@" + first_user_id + ">", "<@" + second_user_id + ">"))

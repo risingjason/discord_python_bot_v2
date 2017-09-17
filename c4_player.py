@@ -1,4 +1,4 @@
-from connect4 import *
+from c4 import *
 
 class Player(object):
     

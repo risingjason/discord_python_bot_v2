@@ -1,4 +1,4 @@
-from player import *
+from c4_player import *
 
 class ConnectFour(object):
     game_end = False

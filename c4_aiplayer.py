@@ -1,5 +1,5 @@
-from player import *
-from connect4 import *
+from c4_player import *
+from c4 import *
 import copy
 import sys
 
@@ -18,7 +18,7 @@ class AIPlayer(Player):
         print("player: {}".format(player))
 
     def get_ai_move(self):
-        depth = 4
+        depth = 5
         current_game_state = ConnectFour()
         current_game_state.board = copy.deepcopy(self.game_board.board)
 
@@ -39,7 +39,7 @@ class AIPlayer(Player):
         for moves in legal_moves:
             game_state.insert(moves, self.player)
 
-            trial = self.min_value(game_state, depth-1) + self.middle_bias(game_state, moves)
+            trial = self.min_value(game_state, depth-1)# + self.middle_bias(game_state, moves)
             print("score: {} move: {}".format(trial, moves))
             
             # better move found, update score
@@ -67,13 +67,9 @@ class AIPlayer(Player):
             game_state.insert(moves, self.opponent)
 
             min_trial = self.max_value(game_state, depth-1)
-            # if min_trial == 10000:
-            #     print("comes here")
             
             if min_trial <= minimum:
                 minimum = min_trial
-            
-            # print("min_trial_change = {}".format(min_trial), end=" ")
             
             game_state.undo_move()
         
@@ -95,8 +91,6 @@ class AIPlayer(Player):
             game_state.insert(moves, self.player)
 
             max_trial = self.min_value(game_state, depth-1)
-            if max_trial == 10000:
-                print("comes here")
 
             if max_trial >= maximum:
                 maximum = max_trial
@@ -116,17 +110,30 @@ class AIPlayer(Player):
         result = 0
 
         if not game_state.game_end:
-            pass
-            #result = self.heuristic(game_state, player)
+            # pass
+            result = self.heuristic(game_state, player)
         else:
             if game_state.winning_player == self.player:
-                # print("{} can win".format(self.player))
                 result = 10000
             elif game_state.winning_player == self.opponent:
-                # print("{} can lose".format(self.opponent))
                 result = -10000
 
         return result
 
     def heuristic(self, game_state, player):
-        pass
+        result = 0
+        board = game_state.board
+        last_col = game_state.last_moves[-1]
+        last_hei = game_state.get_height(last_col) - 1
+
+        # check -
+        if last_col < 6:
+            if board[last_hei][last_col] == board[last_hei][last_col+1] == player:
+                print("comes here")
+                if board[last_hei][last_col+2] == player:
+                    print("Comes here too")
+                    result += 10
+                else:
+                    result += 5
+
+        return result
